@@ -10,6 +10,7 @@ import socket
 import logging
 
 from queue import Queue
+
 from threading import Thread
 from itertools import repeat
 
@@ -43,14 +44,11 @@ def init():
         queue.put(info)
 
     threads = [Scanner(queue) for _ in range(Options.THREADS)]
-
     for t in threads:
         t.start()
 
     queue.join()
-
-    for _ in range(Options.THREADS):
-        queue.put(None)
+    
     for t in threads:
         t.join()
 
